@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Triple J Stock Anlysis</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+</head>
+<body>
+        <label for="stockSymbols"> Choose a stock symbol:</label>
+        <select id="stockSymbols"></select>
+            <option value="">Select a symbol</option>
+        </select>
+ 
+        <script>
+            async function loadSymbols() {
+                try {
+                    const response = await fetch ('http://localhost:5000/api/symbols')
+                    const symbols = await response.json();
+
+                    const dropdown = document.getElementById('stockSymbols');
+                    symbols.forEach(symbol => {
+                        const option = document.createElement('option');
+                        option.value = symbol;
+                        option.text =symbol;
+                        dropdown.add(option);
+                    });
+                } catch (error){;
+                    console.error('Error fetching symbols:', error);
+                }
+            }
+            
+
+             document.addEventListener('DOMContentLoaded', loadSymbols);     
+        </script>
+
+
+
+
+    <div class="container">
+     <div class="center-container">
+        <label for="dateRange">Select Date Range:</label>
+         <input type="text" id="dateRange" placeholder="Select Date Range">
+        <p id="output"></p>
+    </div>
+</div>
+ 
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    flatpickr("#dateRange", {
+        mode:"range",
+        dateFormat:"Y-m-d",
+        onClose: function(selectedDates) {
+            const startDate = selectedDates[0] ? selectedDates[0].toISOString().split("T")[0]: "";
+            const endDate = selectedDates[1] ? selectedDates[1].toISOString().split("T")[0]: "";
+            document.getElementById("output").innerText = `Selected Range: ${startDate} to ${endDay}`;
+            }
+
+        });
+    });
+
+</script>
+</body>
+</html>
