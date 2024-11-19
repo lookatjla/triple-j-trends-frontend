@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+    <link rel="stylesheet" href="css/results.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="triple-j-container">
+        <header id="triple-j-header">
+            <img src="css/logo/logo-transparent-png.png" alt="Triple J Trends Logo" class="triple-j-logo">
+        </header>
+        
+        <h1>Stock Trends</h1>
+        <div class="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        async function fetchData() {
+            // Example data: Replace this with your actual API call
+            const labels = ['2024-11-15', '2024-11-16', '2024-11-17', '2024-11-18', '2024-11-19'];
+            const values = [150, 155, 160, 158, 162];
+            createChart(labels, values);
+        }
+
+        function createChart(labels, values) {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Closing Price',
+                        data: values,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Allow the chart to stretch based on container size
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        tooltip: {
+                            enabled: true
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Price (USD)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Fetch and render data on page load
+        fetchData();
+    </script>
+</body>
+</html>

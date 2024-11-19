@@ -1,0 +1,57 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Center the entire layout on the page */
+body {
+    background-color: #f5deb3;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Main container holding the header and chart */
+.triple-j-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Center the logo at the top */
+header#triple-j-header {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Sizing for the logo */
+.triple-j-logo {
+    max-width: 500px;
+    height: auto;
+}
+
+/* Styling for the chart container */
+.chart-container {
+    width: 1200px; /* Explicitly larger than the logo */
+    height: 700px; /* Proportionally larger height */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Ensure the canvas fills the container */
+canvas#myChart {
+    width: 100% !important; /* Force the canvas to fill the container */
+    height: 100% !important; /* Adjust height dynamically */
+}
