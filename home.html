@@ -23,25 +23,67 @@
                 <input type="date" id="startDate">
             </div>
             <div class="form-group">
-                <label>Market Data Provider:</label>
-                <label><input type="radio" name="provider" value="Polygon"> Polygon</label><br>
-                <label><input type="radio" name="provider" value="AlphaVantage"> AlphaVantage</label>
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate" readonly>
             </div>
+
+            <!-- Automatically set the end date to today's date -->
+            <script>
+                const endDateInput = document.getElementById('endDate');
+                const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+                endDateInput.value = today; // Set the value
+            </script>      
+
             <div class="form-group">
-                <label for="dataIntervals">Data Intervals:</label>
+                <label for="dataIntervals">Data Interval:</label>
                 <select id="dataIntervals">
-                    <option value="Monthly">Monthly</option>
-                    <option value="Quarterly">Quarterly</option>
+                    <option value="Weekly">1 Week</option>
+                    <option value="Monthly">1 Month</option>
+                    <option value="One-Quarter">3 Months</option>
+                    <option value="Two-Quarters">6 Months</option>
+                    <option value="Three-Quarters">9 Months</option>
+                    <option value="Annually">1 Year</option>
                 </select>
             </div>
             <button class="display-results" onclick="redirectToResults()">Display Results</button>
         </div>
     </div>
-
     <script>
+        async function redirectToResults() {
+    const stockTicker = document.getElementById('stock').value;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+
+    if (!stockTicker || !startDate) {
+        alert('Please enter a stock ticker and start date.');
+        return;
+    }
+
+    try {
+        const apiUrl = `http://localhost:8080/api/stocks/analyze?ticker=${stockTicker}&startDate=${startDate}&endDate=${endDate}`;
+        const response = await fetch(apiUrl);
+
+        if (!response.ok) {
+            throw new Error(`Error fetching stock analysis: ${response.statusText}`);
+        }
+
+        const analysisSummary = await response.text();
+
+        // Save the summary to localStorage
+        localStorage.setItem('stockAnalysis', analysisSummary);
+
+        // Redirect to results page
+        window.location.href = 'results.html';
+    } catch (error) {
+        console.error('Failed to fetch stock analysis:', error);
+        alert('Error fetching stock analysis. Please try again.');
+    }
+}       
+    </script>    
+    <!-- <script>
         function redirectToResults() {
             window.location.href = 'results.html';
         }
-    </script>
+    </script> -->
 </body>
 </html>

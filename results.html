@@ -20,6 +20,163 @@
     </div>
 
     <script>
+        async function fetchStockData() {
+            const ticker = 'MSFT'; // Replace with user input or dynamic value
+            const apiUrl = `http://localhost:8080/api/stocks/prices?ticker=${ticker}`;
+    
+            try {
+                const response = await fetch(apiUrl);
+    
+                if (!response.ok) {
+                    throw new Error(`Error fetching stock data: ${response.statusText}`);
+                }
+    
+                const data = await response.json();
+    
+                // Extract opening and closing prices
+                const closingPrices = data.closingPrices;
+                const openingPrices = data.openingPrices;
+    
+                // Format the data for the chart
+                const labels = Object.keys(closingPrices); // Dates
+                const closingValues = Object.values(closingPrices); // Closing prices
+                const openingValues = Object.values(openingPrices); // Opening prices
+    
+                createChart(labels, closingValues, openingValues);
+            } catch (error) {
+                console.error('Failed to fetch stock data:', error);
+                alert('Error fetching stock data. Please try again.');
+            }
+        }
+    
+        function createChart(labels, closingValues, openingValues) {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Closing Prices',
+                            data: closingValues,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Opening Prices',
+                            data: openingValues,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        tooltip: {
+                            enabled: true
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Price (USD)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    
+        // Fetch and render data on page load
+        fetchStockData();
+    </script>
+    
+
+    <!-- 2 <script>
+        async function fetchData() {
+            // Retrieve data from localStorage
+            const stockData = JSON.parse(localStorage.getItem('stockData'));
+    
+            if (!stockData) {
+                alert('No stock data found. Please return to the home page and try again.');
+                return;
+            }
+    
+            const { ticker, price } = stockData;
+    
+            // Create dummy chart data for demonstration
+            const labels = ['2024-11-15', '2024-11-16', '2024-11-17', '2024-11-18', '2024-11-19'];
+            const values = [price, parseFloat(price) + 5, parseFloat(price) - 3, parseFloat(price) + 2, parseFloat(price) + 4];
+    
+            // Display the chart
+            createChart(labels, values);
+    
+            // Optionally, display the fetched stock price on the page
+            document.body.insertAdjacentHTML('beforeend', `<p>Latest Stock Price for ${ticker}: $${price}</p>`);
+        }
+    
+        function createChart(labels, values) {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Closing Price',
+                        data: values,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        tooltip: {
+                            enabled: true
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Price (USD)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    
+        // Fetch and render data on page load
+        fetchData();
+    </script>     -->
+
+    <!-- <script>
         async function fetchData() {
             // Example data: Replace this with your actual API call
             const labels = ['2024-11-15', '2024-11-16', '2024-11-17', '2024-11-18', '2024-11-19'];
@@ -72,6 +229,6 @@
 
         // Fetch and render data on page load
         fetchData();
-    </script>
+    </script> -->
 </body>
 </html>
